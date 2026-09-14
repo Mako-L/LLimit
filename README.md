@@ -1,11 +1,11 @@
 # LLimit
 
-A native macOS menu-bar app that shows **how much of your Claude Code and
-Codex usage windows you've burned through** — at a glance, across multiple
+A native macOS menu-bar app that shows **how much of your Claude Code, Codex,
+and Cursor usage you've burned through** — at a glance, across multiple
 accounts, without leaving the keyboard.
 
 <p align="center">
-  <img src="Resources/screenshot.png" alt="LLimit usage popover" width="480">
+  <img src="Resources/screenshot.png" alt="LLimit usage popover with Claude, Codex, and Cursor" width="480">
 </p>
 
 ---
@@ -45,6 +45,13 @@ Scripts/package_app.sh                  # → build/release/LLimit.app
 open build/release/LLimit.app
 ```
 
+To regenerate the README popover screenshot from a simulated window (Claude,
+Codex, and Cursor cards — no live login):
+
+```sh
+Scripts/capture_readme_screenshot.sh    # → Resources/screenshot.png
+```
+
 For a versioned, zipped artifact:
 
 ```sh
@@ -65,7 +72,8 @@ Scripts/package_app.sh 0.2.0 zip        # → build/release/LLimit-0.2.0.zip
   - Codex: live `chatgpt.com/backend-api/codex/usage` for the primary (5h)
     and secondary (weekly) rate-limit blocks.
   - Cursor: Cursor CLI (`agent` / `cursor-agent`) keychain token against
-    `https://api2.cursor.sh` (`plan` spend + `auto` bucket).
+    `https://api2.cursor.sh` — Cursor Models, Other Models, and Grok Bot,
+    matching the Spendings tab.
 - **Identity at a glance** — surfaces email + plan tier (`max plan`,
   `plus plan`, …) under each account name.
 - **Threshold notifications** — configurable warn-at percentage; one
@@ -94,7 +102,7 @@ Scripts/package_app.sh 0.2.0 zip        # → build/release/LLimit-0.2.0.zip
 | -------- | ----------------------------------------------------------------------- |
 | Claude   | `GET https://api.anthropic.com/api/oauth/usage` with the OAuth token    |
 | Codex    | `GET https://chatgpt.com/backend-api/codex/usage`                       |
-| Cursor   | `POST https://api2.cursor.sh/aiserver.v1.DashboardService/GetCurrentPeriodUsage` (CLI keychain) |
+| Cursor   | `POST https://api2.cursor.sh/aiserver.v1.DashboardService/GetCurrentPeriodUsage` + `GetSandUsageStatus` (CLI keychain) |
 | Auth     | Per-account JSON at `~/Library/Application Support/LLimit/credentials/<uuid>.json` (Claude / Cursor) and `<CODEX_HOME>/auth.json` (Codex) |
 
 LLimit only calls the same provider usage endpoints the CLIs already use

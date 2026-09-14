@@ -25,6 +25,7 @@ Scripts/test_security.sh
 Scripts/package_app.sh                  # → build/release/LLimit.app
 Scripts/package_app.sh 0.2.0 zip        # versioned zip
 Scripts/release.sh 0.2.0 "notes"        # maintainers only
+Scripts/capture_readme_screenshot.sh    # simulated popover → Resources/screenshot.png
 ```
 
 ## Rules
