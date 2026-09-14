@@ -156,6 +156,21 @@
   .provider.claude svg { color: #d98257; }
   .provider.codex svg { color: #0fa684; }
   .provider.cursor svg { color: #2a2a2e; }
+  .download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    background: var(--fg);
+    color: var(--bg);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 20px -6px rgba(0,0,0,0.15);
+  }
+  .download:hover { color: var(--bg); background: #222; }
+  .download svg { width: 15px; height: 15px; }
   .install-label {
     font-size: 12px;
     color: var(--fg-3);
@@ -351,7 +366,15 @@
         </span>
       </div>
 
-      <div class="install-label">Install with one command</div>
+      <a class="download" href="https://github.com/Mako-L/LLimit/releases/latest/download/LLimit-mac.zip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"/>
+          <path d="m7 11 5 5 5-5"/>
+          <path d="M5 21h14"/>
+        </svg>
+        Download for Mac
+      </a>
+      <div class="install-label">or install with one command</div>
       <div class="install-cmd">
         <span class="p">$</span>
         <code id="cmd">curl -fsSL https://raw.githubusercontent.com/githajae/LLimit/main/install.sh | bash</code>
