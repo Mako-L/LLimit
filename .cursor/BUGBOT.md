@@ -11,7 +11,7 @@ Native macOS menu-bar app. Treat auth and credential handling as the high-risk s
 - Org or account IDs concatenated into URLs instead of `URLComponents`
 - Claude OAuth missing S256, secure random verifier, or `state` validation
 - Hardcoded `sk-ant-`, `sk-` keys, or client secrets
-- Sending usage payloads anywhere other than Anthropic's OAuth usage endpoint
+- Sending usage payloads anywhere other than Anthropic's OAuth usage endpoint, Codex usage, or Cursor's dashboard usage API
 
 ## Ignore
 

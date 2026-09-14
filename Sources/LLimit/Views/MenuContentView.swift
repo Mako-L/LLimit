@@ -171,8 +171,7 @@ private struct AccountRowSummary: View {
     /// in *through LLimit* (which writes a per-account snapshot), every
     /// Claude row sees whichever credential the CLI logged in last.
     private var needsLoginToSeparate: Bool {
-        account.provider == .claude
-            && !ClaudeAuthSource.hasSnapshot(for: account.id)
+        account.provider == .claude && !ClaudeAuthSource.hasSnapshot(for: account.id)
     }
 
     @ViewBuilder
@@ -227,7 +226,7 @@ private struct MiniWindow: View {
                     .lineLimit(1)
                     .fixedSize(horizontal: true, vertical: false)
                 Spacer(minLength: 2)
-                Text("\(Int(((1 - pct) * 100).rounded()))% left")
+                Text(window.detail ?? "\(Int(((1 - pct) * 100).rounded()))% left")
                     .font(.caption.monospacedDigit().weight(.semibold))
                     .foregroundStyle(color)
                     .lineLimit(1)
@@ -244,6 +243,10 @@ private struct MiniWindow: View {
     private var shortLabel: String {
         let l = window.label.lowercased()
         if l.contains("opus") { return "OPUS" }
+        if l == "cursor-models" { return "MODELS" }
+        if l == "other-models" { return "OTHER" }
+        if l == "grok-bot" { return "GROK" }
+        if l == "on-demand" { return "OD" }
         return window.label.uppercased()
     }
 }
@@ -307,8 +310,7 @@ private struct AccountCardDetailed: View {
     }
 
     private var needsLoginToSeparate: Bool {
-        account.provider == .claude
-            && !ClaudeAuthSource.hasSnapshot(for: account.id)
+        account.provider == .claude && !ClaudeAuthSource.hasSnapshot(for: account.id)
     }
 
     @ViewBuilder
@@ -382,6 +384,10 @@ private struct WindowRow: View {
         switch window.label {
         case "5h": return "5-hour window"
         case "7d": return "Weekly window"
+        case "cursor-models": return "Cursor Models"
+        case "other-models": return "Other Models"
+        case "grok-bot": return "Grok Bot"
+        case "on-demand": return "On-demand"
         default: return window.label + " window"
         }
     }
@@ -396,6 +402,9 @@ private struct WindowRow: View {
     }
 
     private var rightText: String {
+        if let detail = window.detail, !detail.isEmpty {
+            return detail
+        }
         if let p = window.usedPercent {
             return "\(Int(((1 - p) * 100).rounded()))% left"
         }

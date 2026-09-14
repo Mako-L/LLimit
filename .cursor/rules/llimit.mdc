@@ -16,7 +16,7 @@ Native macOS menu-bar usage meter for Claude Code and Codex. SwiftPM executable 
 
 ## Auth isolation
 
-Each `Account` has its own credential snapshot. Claude: `~/Library/Application Support/LLimit/credentials/<uuid>.json`. Codex: per-account `CODEX_HOME`. Never reuse the Claude CLI keychain entry for a second account.
+Each `Account` has its own credential snapshot. Claude and Cursor: `~/Library/Application Support/LLimit/credentials/<uuid>.json`. Codex: per-account `CODEX_HOME`. Cursor CLI tokens are `cursor-access-token` / `cursor-refresh-token` in the keychain. Never reuse one Claude or Cursor keychain entry across two accounts.
 
 ## Secrets and network
 

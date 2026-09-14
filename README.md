@@ -58,12 +58,14 @@ Scripts/package_app.sh 0.2.0 zip        # → build/release/LLimit-0.2.0.zip
 - **Live menu-bar icon** — two stacked progress bars (5-hour / weekly) plus an
   optional headline percent. Color escalates orange ≥70%, red ≥90%.
 - **Multiple accounts at once** — list view up to 3 accounts, automatic
-  2-column grid above that. Supports any mix of Claude and Codex configs.
+  2-column grid above that. Supports any mix of Claude, Codex, and Cursor configs.
 - **Real plan-relative percentages**
   - Claude: calls `https://api.anthropic.com/api/oauth/usage` with your
     existing OAuth token (`5h`, `7d`, `7d opus`, `7d sonnet`).
-  - Codex: parses `~/.codex/sessions/**/*.jsonl` `token_count` events for the
-    primary (5h) and secondary (weekly) rate-limit blocks.
+  - Codex: live `chatgpt.com/backend-api/codex/usage` for the primary (5h)
+    and secondary (weekly) rate-limit blocks.
+  - Cursor: Cursor CLI (`agent` / `cursor-agent`) keychain token against
+    `https://api2.cursor.sh` (`plan` spend + `auto` bucket).
 - **Identity at a glance** — surfaces email + plan tier (`max plan`,
   `plus plan`, …) under each account name.
 - **Threshold notifications** — configurable warn-at percentage; one
@@ -79,6 +81,10 @@ Scripts/package_app.sh 0.2.0 zip        # → build/release/LLimit-0.2.0.zip
   - **Codex**: launches `codex login` in-process, captures the device-code
     URL, and snapshots the resulting `auth.json` into the per-account
     `CODEX_HOME` so two Codex configs don't share state.
+  - **Cursor**: launches `agent login` (Cursor CLI), then snapshots
+    `cursor-access-token` / `cursor-refresh-token` from the keychain into
+    the per-account credential file. The default account also reads the
+    live CLI keychain so a normal `agent login` is enough.
 
 ---
 
@@ -87,11 +93,12 @@ Scripts/package_app.sh 0.2.0 zip        # → build/release/LLimit-0.2.0.zip
 | Provider | Source                                                                  |
 | -------- | ----------------------------------------------------------------------- |
 | Claude   | `GET https://api.anthropic.com/api/oauth/usage` with the OAuth token    |
-| Codex    | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` (`token_count` events)   |
-| Auth     | Per-account JSON at `~/Library/Application Support/LLimit/credentials/<uuid>.json` (Claude) and `<CODEX_HOME>/auth.json` (Codex) |
+| Codex    | `GET https://chatgpt.com/backend-api/codex/usage`                       |
+| Cursor   | `POST https://api2.cursor.sh/aiserver.v1.DashboardService/GetCurrentPeriodUsage` (CLI keychain) |
+| Auth     | Per-account JSON at `~/Library/Application Support/LLimit/credentials/<uuid>.json` (Claude / Cursor) and `<CODEX_HOME>/auth.json` (Codex) |
 
-LLimit never sends data anywhere except to the same Anthropic OAuth
-endpoint the Claude CLI itself uses.
+LLimit only calls the same provider usage endpoints the CLIs already use
+(Anthropic OAuth usage, Codex usage, Cursor dashboard usage).
 
 ---
 

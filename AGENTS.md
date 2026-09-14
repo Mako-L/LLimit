@@ -1,6 +1,6 @@
 # LLimit
 
-Native macOS menu-bar app (SwiftUI + AppKit) that shows Claude Code and Codex usage windows across multiple accounts.
+Native macOS menu-bar app (SwiftUI + AppKit) that shows Claude Code, Codex, and Cursor CLI usage windows across multiple accounts.
 
 Requires macOS 14+ and Xcode 15 / Swift 5.9. Apple Silicon is the supported install target; `Scripts/package_app.sh` builds universal when full Xcode is present.
 
@@ -29,10 +29,10 @@ Scripts/release.sh 0.2.0 "notes"        # maintainers only
 
 ## Rules
 
-- Keep Claude and Codex auth isolated per account. Claude snapshots go to `credentials/<uuid>.json`; Codex uses a per-account `CODEX_HOME`. Do not share one keychain token across multiple Claude accounts.
+- Keep Claude, Codex, and Cursor auth isolated per account. Claude and Cursor snapshots go to `credentials/<uuid>.json`; Codex uses a per-account `CODEX_HOME`. Cursor CLI tokens live in the `cursor-access-token` / `cursor-refresh-token` keychain items. Do not share one keychain token across multiple Claude or Cursor accounts.
 - Persist `accounts.json` and credential files at `0o600`; credential directories at `0o700`.
 - Never log tokens, PKCE verifiers, auth-URL query strings, or request bodies. `Scripts/test_security.sh` fails the build if those return.
-- External HTTP is HTTPS only. Claude usage is `GET https://api.anthropic.com/api/oauth/usage`. Build org-scoped URLs with `URLComponents`, not string interpolation.
+- External HTTP is HTTPS only. Claude usage is `GET https://api.anthropic.com/api/oauth/usage`. Cursor usage is `POST https://api2.cursor.sh/aiserver.v1.DashboardService/GetCurrentPeriodUsage` with the CLI bearer. Build org-scoped URLs with `URLComponents`, not string interpolation.
 - Claude login is PKCE S256 with `SecRandomCopyBytes` / CryptoKit and a validated `state`. Callback host is localhost.
 - Do not send usage data anywhere except the Anthropic OAuth usage endpoint the Claude CLI already uses.
 - Views stay dumb. Observable state lives in `AccountStore` and `RefreshCoordinator`.
